@@ -79,7 +79,7 @@ export const ContextMenu = () => {
       />
       <ContextMenuButton
         actionIcon="codicon codicon-file-symlink-directory"
-        actionName="在此開啟預設檔案總管"
+        actionName="在預設檔案總管顯示"
         onClick={createContextMenuHandler(openInDefaultExplorer)}
       />
       <Divider sx={{ my: 0.5 }} />
