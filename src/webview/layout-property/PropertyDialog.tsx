@@ -2,11 +2,11 @@ import { memo, Suspense } from "react";
 import { Box } from "@mui/material";
 
 import { Dialog } from "@view/components/Dialog";
-import { propertyDialogSx, propertyDialogClassName, rowHeight } from "@view/layout-dialog/config";
+import { propertyDialogSx, propertyDialogClassName, rowHeight } from "@view/layout-property/config";
 import { ActionButton, ActionGroup, ActionInput } from "@view/components/Action";
 
-import { useLastSelectedItem } from "@view/layout-dialog/hooks";
-import { ImageDetailProps, isImageFile } from "@view/layout-dialog/ImageDetail";
+import { useLastSelectedItem } from "@view/layout-property/hooks";
+import { ImageDetailProps, isImageFile } from "@view/layout-property/ImageDetail";
 
 import { directorySizeInfoCache, fileAttributesCache, fileAvailabilityCache } from "@view/store/cache";
 import { appStateStore } from "@view/store/data";

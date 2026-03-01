@@ -5,30 +5,9 @@ import { List, type ListItem } from "@view/components/List";
 import { ActionButton, ActionDropdown, ActionDropdownButton, ActionGroup } from "@view/components/Action";
 import { navigateHistoryStore, navigationExternalStore, navigationStore } from "@view/store/data";
 import { clearNavigationHistory, navigateToFolder, readDrives } from "@view/action/navigation";
+import { addBookmark, removeBookmark, clearBookmarks, navigateToBookmark } from "@view/action/bookmark";
+import { moveBookmarkUp, moveBookmarkDown, moveBookmarkTop, moveBookmarkBottom } from "@view/action/bookmark";
 import { formatFileSize } from "@shared/utils/formatter";
-
-const fakeBookmarkItems: ListItem[] = [
-  {
-    id: "C:\\Users\\user\\Documents\\Python Projects",
-    icon: "codicon codicon-folder",
-    text: "Python Projects",
-  },
-  {
-    id: "C:\\Users\\user\\Documents\\JavaScript Projects",
-    icon: "codicon codicon-folder",
-    text: "JavaScript Projects",
-  },
-  {
-    id: "C:\\Users\\user\\Desktop\\work",
-    icon: "codicon codicon-folder",
-    text: "work",
-  },
-  {
-    id: "C:\\Users\\user\\Desktop\\圖片",
-    icon: "codicon codicon-folder",
-    text: "圖片",
-  },
-];
 
 /**
  * 映射特殊資料夾到對應圖示
@@ -58,17 +37,31 @@ const getBasename = (path: string) => {
 
 /**
  * 用於顯示路徑導航面板的書籤面板元件。
+ * active 項目始終為當前所在目錄，操作(刪除、移動)皆針對當前目錄的書籤。
  */
 const BookmarkPanel = () => {
-  const [activeId, setActiveId] = useState("");
+  const currentPath = navigationStore((state) => state.currentPath);
+  const favoritePaths = navigationExternalStore((state) => state.favoritePaths);
+
+  const bookmarkItems: ListItem[] = favoritePaths.map((p) => ({
+    id: p,
+    icon: "codicon codicon-folder",
+    text: getBasename(p),
+    detail: p,
+  }));
+
+  const isBookmarked = favoritePaths.includes(currentPath);
+  const bookmarkIndex = favoritePaths.indexOf(currentPath);
+  const isFirst = isBookmarked && bookmarkIndex === 0;
+  const isLast = isBookmarked && bookmarkIndex === favoritePaths.length - 1;
 
   return (
     <Panel title="書籤">
       <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 1, alignItems: "start" }}>
         <List
-          items={fakeBookmarkItems.map((item) => ({ ...item, detail: item.id }))}
-          activeItemId={activeId}
-          onClickItem={(item) => setActiveId(item.id)}
+          items={bookmarkItems}
+          activeItemId={currentPath}
+          onClickItem={navigateToBookmark}
           defaultRows={5}
           defaultActionExpanded
         />
@@ -78,31 +71,42 @@ const BookmarkPanel = () => {
             <ActionButton
               actionIcon="codicon codicon-add"
               actionName="添加書籤"
-              actionDetail="為選取的/作用中的資料夾添加書籤"
+              actionDetail="為目前所在的資料夾添加書籤"
               tooltipPlacement="right"
+              onClick={addBookmark}
+              disabled={isBookmarked}
             />
             <ActionButton
               actionIcon="codicon codicon-chrome-minimize"
               actionName="刪除書籤"
-              actionDetail="刪除所選的書籤"
+              actionDetail="刪除目前所在資料夾的書籤"
               tooltipPlacement="right"
+              disabled={!isBookmarked}
+              onClick={removeBookmark}
             />
             <ActionDropdown actionName="更多操作" actionDetail="更多書籤相關操作" tooltipPlacement="right">
-              <ActionDropdownButton actionIcon="codicon codicon-close" actionName="清空" actionDetail="刪除所有書籤" />
+              <ActionDropdownButton
+                actionIcon="codicon codicon-close"
+                actionName="清空"
+                actionDetail="刪除所有書籤"
+                onClick={clearBookmarks}
+              />
 
               <Divider sx={{ my: 0.5 }} />
 
               <ActionDropdownButton
                 actionIcon="codicon codicon-fold-up"
                 actionName="移至頂部"
-                actionDetail="將所選書籤移動到列表頂部"
-                disabled
+                actionDetail="將目前書籤移動到列表頂部"
+                disabled={!isBookmarked || isFirst}
+                onClick={moveBookmarkTop}
               />
               <ActionDropdownButton
                 actionIcon="codicon codicon-fold-down"
                 actionName="移至底部"
-                actionDetail="將所選書籤移動到列表底部"
-                disabled
+                actionDetail="將目前書籤移動到列表底部"
+                disabled={!isBookmarked || isLast}
+                onClick={moveBookmarkBottom}
               />
             </ActionDropdown>
           </ActionGroup>
@@ -110,17 +114,19 @@ const BookmarkPanel = () => {
           <ActionGroup orientation="vertical" size="small">
             <ActionButton
               actionIcon="codicon codicon-triangle-up"
-              disabled
+              disabled={!isBookmarked || isFirst}
               actionName="移動書籤"
-              actionDetail="將目前所在的書籤向上移動"
+              actionDetail="將目前書籤向上移動"
               tooltipPlacement="right"
+              onClick={moveBookmarkUp}
             />
             <ActionButton
               actionIcon="codicon codicon-triangle-down"
-              disabled
+              disabled={!isBookmarked || isLast}
               actionName="移動書籤"
-              actionDetail="將目前所在的書籤向下移動"
+              actionDetail="將目前書籤向下移動"
               tooltipPlacement="right"
+              onClick={moveBookmarkDown}
             />
           </ActionGroup>
         </Box>

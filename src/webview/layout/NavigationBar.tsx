@@ -10,7 +10,7 @@ import { navigateHistoryStore, navigationStore } from "@view/store/data";
 
 import { stageDestinationPath, navigateGotoFolder, navigateUp, refresh } from "@view/action/navigation";
 import { navigateToFolder, navigateToNextFolder, navigateToPreviousFolder } from "@view/action/navigation";
-import { navigateToImageGridView } from "@view/action/navigation";
+import { navigateToImageGridView, stageSearchQuery, executeSearch } from "@view/action/navigation";
 import { setSortField, setSortOrder, setFilterOption, toggleFilter } from "@view/action/view";
 import { setGridSize, getGridSize, setGridGap } from "@view/action/view";
 import { createNewFolder } from "@view/action/operation";
@@ -130,16 +130,22 @@ const ActionGroupAddress = memo(() => {
 });
 
 /**
- * 處理搜尋輸入相關功能
+ * 處理搜尋輸入相關功能，觸發方式與路徑跳轉一致 (輸入後按 Enter)
  */
 const ActionGroupSearch = memo(() => {
+  const searchQuery = navigationStore((state) => state.searchQuery);
+
   return (
     <ActionGroup>
       <ActionInput
         actionName="搜尋"
-        actionDetail="模糊搜尋檔案或資料夾名稱"
+        actionDetail="按 Enter 模糊搜尋檔案名稱 (含副檔名)"
         actionIcon="codicon codicon-search"
         placeholder="搜尋"
+        value={searchQuery}
+        onChange={stageSearchQuery}
+        blurOnEnter
+        onBlur={executeSearch}
       />
     </ActionGroup>
   );

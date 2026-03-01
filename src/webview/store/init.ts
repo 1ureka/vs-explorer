@@ -18,6 +18,9 @@ const readInitData = async () => {
   invoke("system.read.volumes", undefined).then((drives) => {
     navigationExternalStore.setState({ systemDrives: drives });
   });
+  invoke("bookmarks.read", undefined).then((bookmarks) => {
+    navigationExternalStore.setState({ favoritePaths: bookmarks });
+  });
 
   const initialData = dataStore.getState();
   const result = await requestQueue.add(() => invoke("system.read.dir", { dirPath: initialData.currentPath }));

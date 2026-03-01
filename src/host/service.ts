@@ -3,11 +3,12 @@ import * as vscode from "vscode";
 import { pasteOptions, pastePickOptions } from "@host/config";
 import { handleDelete, handlePaste, handleRename } from "@host/handlers";
 import { handleCreateFile, handleCreateDir } from "@host/handlers";
-import { handleReadDirectory, handleReadImages } from "@host/handlers";
+import { handleReadDirectory, handleReadImages, handleSearchDirectory } from "@host/handlers";
 
 import { generateThumbnail, openImage } from "@host/utils/image";
 import { listSystemFolders, listVolumes } from "@host/utils/system-windows";
 import { getFileAttributes, getFileAvailability, getDirectorySizeInfo } from "@host/utils/system-windows";
+import { resolvePath } from "@host/utils/system";
 import type { WithProgress } from "@shared/utils/type";
 
 /**
@@ -111,6 +112,91 @@ const openTarget = ({ dirPath, target }: { dirPath: string; target: "workspace" 
 };
 
 /**
+ * 在作業系統預設的檔案總管中開啟指定目錄
+ */
+const openInDefaultExplorer = (dirPath: string) => {
+  vscode.commands.executeCommand("revealFileInOS", vscode.Uri.file(dirPath));
+};
+
+// ----- 書籤 ----- //
+
+/**
+ * 讀取書籤列表
+ */
+const readBookmarks = (): string[] => {
+  const config = vscode.workspace.getConfiguration("1ureka.explorer");
+  return config.get<string[]>("bookmarks", []);
+};
+
+/**
+ * 寫入書籤列表
+ */
+const writeBookmarks = async (bookmarks: string[]) => {
+  const config = vscode.workspace.getConfiguration("1ureka.explorer");
+  await config.update("bookmarks", bookmarks, vscode.ConfigurationTarget.Global);
+  return bookmarks;
+};
+
+/**
+ * 添加書籤
+ */
+const addBookmark = async (dirPath: string) => {
+  const resolved = resolvePath(dirPath);
+  const bookmarks = readBookmarks();
+  if (bookmarks.includes(resolved)) return bookmarks;
+  bookmarks.push(resolved);
+  return writeBookmarks(bookmarks);
+};
+
+/**
+ * 刪除書籤
+ */
+const removeBookmark = async (dirPath: string) => {
+  const resolved = resolvePath(dirPath);
+  const bookmarks = readBookmarks().filter((p) => p !== resolved);
+  return writeBookmarks(bookmarks);
+};
+
+/**
+ * 清空書籤
+ */
+const clearBookmarks = async () => {
+  return writeBookmarks([]);
+};
+
+/**
+ * 移動書籤到指定位置 ("top" | "bottom" | "up" | "down")
+ */
+const moveBookmark = async ({
+  dirPath,
+  direction,
+}: {
+  dirPath: string;
+  direction: "top" | "bottom" | "up" | "down";
+}) => {
+  const resolved = resolvePath(dirPath);
+  const bookmarks = readBookmarks();
+  const index = bookmarks.indexOf(resolved);
+  if (index === -1) return bookmarks;
+
+  bookmarks.splice(index, 1);
+
+  if (direction === "top") {
+    bookmarks.unshift(resolved);
+  } else if (direction === "bottom") {
+    bookmarks.push(resolved);
+  } else if (direction === "up") {
+    const newIndex = Math.max(0, index - 1);
+    bookmarks.splice(newIndex, 0, resolved);
+  } else if (direction === "down") {
+    const newIndex = Math.min(bookmarks.length, index + 1);
+    bookmarks.splice(newIndex, 0, resolved);
+  }
+
+  return writeBookmarks(bookmarks);
+};
+
+/**
  * [工作流] 執行建立檔案：包含輸入框 UI 與實作
  */
 const runCreateFileWorkflow = async ({ dirPath }: { dirPath: string }) => {
@@ -192,6 +278,7 @@ export const explorerService = {
   "show.error": showError,
   "clipboard.write": writeClipboard,
   "system.read.dir": handleReadDirectory,
+  "system.search.dir": handleSearchDirectory,
   "system.read.user.paths": readUserPaths,
   "system.read.volumes": readSystemVolumes,
   "system.read.images": readImages,
@@ -202,9 +289,15 @@ export const explorerService = {
   "system.read.dir.sizeinfo": readDirectorySizeInfo,
   "system.open.file": openFile,
   "system.open.dir": openTarget,
+  "system.open.default.explorer": openInDefaultExplorer,
   "system.create.file": runCreateFileWorkflow,
   "system.create.dir": runCreateDirWorkflow,
   "system.paste": runPasteWorkflow,
   "system.delete": runDeleteWorkflow,
   "system.rename": runRenameWorkflow,
+  "bookmarks.read": readBookmarks,
+  "bookmarks.add": addBookmark,
+  "bookmarks.remove": removeBookmark,
+  "bookmarks.clear": clearBookmarks,
+  "bookmarks.move": moveBookmark,
 } as const;

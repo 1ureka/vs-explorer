@@ -1,7 +1,7 @@
 import { memo, Suspense } from "react";
 import { imageMetadataCache } from "@view/store/cache";
-import { propertyDialogClassName } from "@view/layout-dialog/config";
-import { useLastSelectedItem } from "@view/layout-dialog/hooks";
+import { propertyDialogClassName } from "@view/layout-property/config";
+import { useLastSelectedItem } from "@view/layout-property/hooks";
 
 const className = propertyDialogClassName;
 

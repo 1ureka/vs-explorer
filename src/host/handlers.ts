@@ -1,4 +1,5 @@
 import fs from "fs-extra";
+import Fuse from "fuse.js";
 import * as path from "path";
 
 import { tryCatch } from "@shared/utils/index";
@@ -298,5 +299,30 @@ const handleDelete = async (params: {
 
 // ----------------------------------------------------------------------------
 
+/**
+ * 根據搜尋字串，以 FuseJS 模糊比對資料夾內的檔案名稱並回傳篩選後的結果
+ */
+const handleSearchDirectory = async (params: { dirPath: string; query: string }): Promise<ReadResourceResult> => {
+  const result = await handleReadDirectory({ dirPath: params.dirPath });
+
+  if (!params.query.trim() || result.mode !== "directory") return result;
+
+  const fuse = new Fuse(result.entries, {
+    keys: ["fileName"],
+    threshold: 0.4,
+  });
+
+  const filtered = fuse.search(params.query).map((r) => r.item);
+
+  let folderCount = 0;
+  let fileCount = 0;
+  for (const entry of filtered) {
+    if (entry.fileType === "folder" || entry.fileType === "file-symlink-directory") folderCount++;
+    else fileCount++;
+  }
+
+  return { ...result, entries: filtered, folderCount, fileCount };
+};
+
 export { handleInitialData, handleCreateFile, handleCreateDir, handlePaste, handleRename, handleDelete };
-export { handleReadDirectory, handleReadImages };
+export { handleReadDirectory, handleReadImages, handleSearchDirectory };

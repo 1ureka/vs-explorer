@@ -1,6 +1,6 @@
 import { Divider, Popover } from "@mui/material";
-import { appStateStore, dataStore, selectionStore, clipboardStore, viewDataStore } from "@view/store/data";
-import { openInEnvironment, navigateUp } from "@view/action/navigation";
+import { appStateStore, selectionStore, clipboardStore, viewDataStore } from "@view/store/data";
+import { openInEnvironment, openInDefaultExplorer } from "@view/action/navigation";
 import { writeClipboard, readClipboard } from "@view/action/clipboard";
 import { openFile, createNewFolder, createNewFile, deleteItems } from "@view/action/operation";
 import { closeContextMenu, openPropertyDialog } from "@view/action/app";
@@ -52,7 +52,6 @@ export const ContextMenu = () => {
   const lastSelectedIndex = selectionStore((state) => state.lastSelectedIndex);
   const contextMenuAnchor = appStateStore((state) => state.contextMenuAnchor);
 
-  const isCurrentRoot = dataStore((state) => state.isCurrentRoot);
   const selected = selectionStore((state) => state.selected);
   const clipboardEntries = clipboardStore((state) => state.entries);
 
@@ -79,10 +78,9 @@ export const ContextMenu = () => {
         onClick={createContextMenuHandler(() => openInEnvironment("terminal"))}
       />
       <ContextMenuButton
-        actionIcon="codicon codicon-arrow-up"
-        actionName="前往上層"
-        onClick={createContextMenuHandler(navigateUp)}
-        disabled={isCurrentRoot}
+        actionIcon="codicon codicon-file-symlink-directory"
+        actionName="在預設檔案總管顯示"
+        onClick={createContextMenuHandler(openInDefaultExplorer)}
       />
       <Divider sx={{ my: 0.5 }} />
 

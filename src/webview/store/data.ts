@@ -18,6 +18,7 @@ if (!initialData) {
 
 const initialAppState = {
   showPropertyDialog: false,
+  showShortcutsDialog: false,
   showLeftPanel: true,
   contextMenuAnchor: null,
   contextMenuIndex: null,
@@ -31,6 +32,7 @@ initialPathHeatmap.set(initialPath, 1);
 const initialNavigationState = {
   currentPath: initialPath,
   destPath: initialPath,
+  searchQuery: "",
   pathHeatmap: initialPathHeatmap,
   recentlyVisitedPaths: [initialPath],
   mostFrequentPaths: [initialPath],
@@ -61,6 +63,7 @@ const initialViewState: ViewState = {
 
 type AppState = {
   showPropertyDialog: boolean;
+  showShortcutsDialog: boolean;
   showLeftPanel: boolean;
   contextMenuAnchor: { top: number; left: number } | null;
 };
@@ -69,6 +72,8 @@ type NavigationState = {
   currentPath: string;
   /** 使用者在輸入框打的暫存目標路徑 */
   destPath: string;
+  /** 搜尋欄位的暫存查詢字串 */
+  searchQuery: string;
   pathHeatmap: Map<string, number>;
   recentlyVisitedPaths: string[];
   mostFrequentPaths: string[];
