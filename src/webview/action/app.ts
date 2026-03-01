@@ -62,4 +62,20 @@ const closePropertyDialog = () => {
   appStateStore.setState({ showPropertyDialog: false });
 };
 
-export { registerContextMenu, closeContextMenu, openPropertyDialog, closePropertyDialog };
+/**
+ * 開啟快捷鍵對話框
+ */
+const openShortcutsDialog = () => {
+  appStateStore.setState({ showShortcutsDialog: true });
+};
+
+/**
+ * 關閉快捷鍵對話框
+ */
+const closeShortcutsDialog = () => {
+  appStateStore.setState({ showShortcutsDialog: false });
+};
+
+export { registerContextMenu, closeContextMenu };
+export { openPropertyDialog, closePropertyDialog };
+export { openShortcutsDialog, closeShortcutsDialog };

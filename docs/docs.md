@@ -279,11 +279,17 @@
 | 讀取 | `system.read.dir.sizeinfo` | 取得資料夾統計資訊 |
 | 開啟 | `system.open.file` | 用 VS Code 編輯器開啟檔案 |
 | 開啟 | `system.open.dir` | 開啟為新工作區或終端機 |
+| 開啟 | `system.open.default.explorer` | 在作業系統預設檔案總管中開啟目錄 |
 | 工作流 | `system.create.file` | 建立檔案（含輸入框 UI） |
 | 工作流 | `system.create.dir` | 建立資料夾（含輸入框 UI） |
 | 工作流 | `system.paste` | 貼上操作（含選項選擇 UI + 進度條） |
 | 工作流 | `system.delete` | 刪除操作（含確認提示 UI + 進度條） |
 | 工作流 | `system.rename` | 重新命名 |
+| 書籤 | `bookmarks.read` | 讀取書籤列表（從 VS Code machine-scoped 設定） |
+| 書籤 | `bookmarks.add` | 添加書籤 |
+| 書籤 | `bookmarks.remove` | 刪除書籤 |
+| 書籤 | `bookmarks.clear` | 清空書籤 |
+| 書籤 | `bookmarks.move` | 移動書籤位置（上/下/置頂/置底） |
 
 其中「工作流」類服務整合了 VS Code 的 `showInputBox`、`showQuickPick`、`showWarningMessage`、`withProgress` 等 UI API 與底層 handler 邏輯。所有 Windows 限定的服務在非 Windows 環境會回傳空值。
 

@@ -6,7 +6,7 @@ import { clipboardStore, renameStore, selectionStore, viewDataStore } from "@vie
 import { deleteItems, renameItem, renameItemTemp } from "@view/action/operation";
 import { readClipboard, writeClipboard } from "@view/action/clipboard";
 import { selectAll, selectInvert, selectNone } from "@view/action/selection";
-import { openPropertyDialog } from "@view/action/app";
+import { openPropertyDialog, openShortcutsDialog } from "@view/action/app";
 
 /**
  * 針對單一選取項目所顯示的操作群組 (最後選取的單一項目)
@@ -145,17 +145,34 @@ const ActionGroupForClipboard = memo(() => {
   );
 });
 
+/**
+ * 快捷鍵對話框按鈕群組
+ */
+const ActionGroupForShortcuts = memo(() => {
+  return (
+    <ActionGroup>
+      <ActionButton
+        actionIcon="codicon codicon-keyboard"
+        actionName="快捷鍵"
+        actionDetail="檢視所有可用的鍵盤快捷鍵"
+        onClick={openShortcutsDialog}
+      />
+    </ActionGroup>
+  );
+});
+
 const ActionBar = memo(() => {
   const viewMode = viewDataStore((state) => state.viewMode);
 
   if (viewMode !== "directory") return null;
 
   return (
-    <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto 0.35fr 0.3fr", gap: 1, pt: 1 }}>
+    <Box sx={{ display: "grid", gridTemplateColumns: "1fr auto 0.35fr 0.3fr auto", gap: 1, pt: 1 }}>
       <ActionGroupForSingleItem />
       <ActionGroupForSelect />
       <ActionGroupForSelectedItems />
       <ActionGroupForClipboard />
+      <ActionGroupForShortcuts />
     </Box>
   );
 });
