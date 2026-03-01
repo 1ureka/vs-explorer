@@ -327,7 +327,7 @@ Webview 前端的主入口檔案，定義根元件 `App` 並透過 `startReactAp
 
 ---
 
-# `@view/layout-dialog/config.ts`
+# `@view/layout-property/config.ts`
 
 定義屬性對話框（Property Dialog）的樣式設定與常數：
 
@@ -337,7 +337,7 @@ Webview 前端的主入口檔案，定義根元件 `App` 並透過 `startReactAp
 
 ---
 
-# `@view/layout-dialog/hooks.ts`
+# `@view/layout-property/hooks.ts`
 
 提供 `useLastSelectedItem()` hook。
 
@@ -345,7 +345,7 @@ Webview 前端的主入口檔案，定義根元件 `App` 並透過 `startReactAp
 
 ---
 
-# `@view/layout-dialog/ImageDetail.tsx`
+# `@view/layout-property/ImageDetail.tsx`
 
 提供圖片詳細資訊元件，用於屬性對話框中：
 
@@ -357,7 +357,7 @@ Webview 前端的主入口檔案，定義根元件 `App` 並透過 `startReactAp
 
 ---
 
-# `@view/layout-dialog/PropertyDialog.tsx`
+# `@view/layout-property/PropertyDialog.tsx`
 
 屬性對話框元件，以 `Dialog` 包裹，顯示選取項目的完整詳細資訊。
 

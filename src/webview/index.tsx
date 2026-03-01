@@ -15,7 +15,7 @@ import { TableBody } from "@view/layout-table/TableBody";
 import { ActionBar } from "@view/layout/ActionBar";
 import { ImageGrid } from "@view/layout-grid/ImageGrid";
 import { ContextMenu } from "@view/layout-menu/ContextMenu";
-import { PropertyDialog } from "@view/layout-dialog/PropertyDialog";
+import { PropertyDialog } from "@view/layout-property/PropertyDialog";
 import { ShortcutsDialog } from "@view/layout-shortcuts/ShortcutsDialog";
 
 const appClassName = {

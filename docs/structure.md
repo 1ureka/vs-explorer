@@ -8,16 +8,16 @@
 
 定義於 `tsconfig.json` 的 `paths`，並同步於 `vitest.config.ts` 與 `src/build.ts` (esbuild alias)。
 
-| 別名                | 實際路徑              | 用途說明                                      |
-| ------------------- | --------------------- | --------------------------------------------- |
-| `@host/utils/*`     | `src/utils/host/*`    | 僅在 **Node.js (擴展主機)** 端使用的工具函式  |
-| `@view/utils/*`     | `src/utils/webview/*` | 僅在 **Browser (Webview)** 端使用的工具函式   |
-| `@shared/utils/*`   | `src/utils/shared/*`  | 兩端皆可使用的 **共用** 工具函式與型別        |
-| `@vscode/utils/*`   | `src/vscode/*`        | 對 **VS Code API** 的薄封裝層                 |
-| `@assets/*`         | `src/assets/*`        | 靜態資源（CSS、副檔名對應表等）               |
-| `@host/*`           | `src/host/*`          | 擴展主機端的 **核心業務** 程式碼              |
-| `@view/*`           | `src/webview/*`       | Webview 前端的 **核心業務** 程式碼            |
-| `@tests/*`          | `tests/*`             | 測試輔助程式碼與測試檔案                      |
+| 別名              | 實際路徑              | 用途說明                                     |
+| ----------------- | --------------------- | -------------------------------------------- |
+| `@host/utils/*`   | `src/utils/host/*`    | 僅在 **Node.js (擴展主機)** 端使用的工具函式 |
+| `@view/utils/*`   | `src/utils/webview/*` | 僅在 **Browser (Webview)** 端使用的工具函式  |
+| `@shared/utils/*` | `src/utils/shared/*`  | 兩端皆可使用的 **共用** 工具函式與型別       |
+| `@vscode/utils/*` | `src/vscode/*`        | 對 **VS Code API** 的薄封裝層                |
+| `@assets/*`       | `src/assets/*`        | 靜態資源（CSS、副檔名對應表等）              |
+| `@host/*`         | `src/host/*`          | 擴展主機端的 **核心業務** 程式碼             |
+| `@view/*`         | `src/webview/*`       | Webview 前端的 **核心業務** 程式碼           |
+| `@tests/*`        | `tests/*`             | 測試輔助程式碼與測試檔案                     |
 
 ---
 
@@ -72,7 +72,7 @@ root/
 │       ├── action/              #   請參考 docs2.md
 │       ├── components/          #   請參考 docs2.md
 │       ├── layout/              #   請參考 docs2.md
-│       ├── layout-dialog/       #   請參考 docs2.md
+│       ├── layout-property/     #   請參考 docs2.md
 │       ├── layout-grid/         #   請參考 docs2.md
 │       ├── layout-table/        #   請參考 docs2.md
 │       └── store/               #   請參考 docs2.md
@@ -104,27 +104,27 @@ root/
 
 ### `package.json`
 
-| 欄位           | 說明                                                             |
-| -------------- | ---------------------------------------------------------------- |
-| `main`         | `./dist/extension.js` — 擴展主機入口                            |
-| `type`         | `module` — 使用 ESM                                             |
-| `engines`      | VS Code `^1.106.1`                                              |
-| `activationEvents` | `onStartupFinished`                                         |
+| 欄位               | 說明                                 |
+| ------------------ | ------------------------------------ |
+| `main`             | `./dist/extension.js` — 擴展主機入口 |
+| `type`             | `module` — 使用 ESM                  |
+| `engines`          | VS Code `^1.106.1`                   |
+| `activationEvents` | `onStartupFinished`                  |
 
 **主要相依套件：**
 
-| 類別            | 套件                                                                  |
-| --------------- | --------------------------------------------------------------------- |
-| Runtime         | `sharp` (圖片處理)、`@vscode/codicons` (圖示)                        |
-| Frontend UI     | `@mui/material`、`@emotion/react`、`@emotion/styled`、`react`        |
-| Frontend 狀態   | `zustand`                                                            |
-| Frontend 虛擬化 | `@tanstack/react-virtual`                                            |
-| 系統互動        | `fs-extra`、`iconv-lite` (Big5 編碼)                                 |
-| 搜尋            | `fuse.js` (模糊搜尋)                                                 |
-| 色彩            | `colord`                                                             |
-| 構建            | `esbuild`、`tsx`、`@vscode/vsce`                                     |
-| 測試            | `vitest`                                                             |
-| Lint            | `eslint`、`@typescript-eslint/*`                                     |
+| 類別            | 套件                                                          |
+| --------------- | ------------------------------------------------------------- |
+| Runtime         | `sharp` (圖片處理)、`@vscode/codicons` (圖示)                 |
+| Frontend UI     | `@mui/material`、`@emotion/react`、`@emotion/styled`、`react` |
+| Frontend 狀態   | `zustand`                                                     |
+| Frontend 虛擬化 | `@tanstack/react-virtual`                                     |
+| 系統互動        | `fs-extra`、`iconv-lite` (Big5 編碼)                          |
+| 搜尋            | `fuse.js` (模糊搜尋)                                          |
+| 色彩            | `colord`                                                      |
+| 構建            | `esbuild`、`tsx`、`@vscode/vsce`                              |
+| 測試            | `vitest`                                                      |
+| Lint            | `eslint`、`@typescript-eslint/*`                              |
 
 ### `tsconfig.json`
 
