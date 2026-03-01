@@ -170,6 +170,29 @@ const navigateToImageGridView = () => {
   return navigateToImages({ dirPath: currentPath });
 };
 
+/**
+ * 暫存使用者輸入的搜尋字串
+ */
+const stageSearchQuery = (query: string) => {
+  navigationStore.setState({ searchQuery: query });
+};
+
+/**
+ * 根據暫存的搜尋字串，請求後端模糊搜尋當前目錄的檔案名稱
+ */
+const executeSearch = async () => {
+  const { searchQuery } = navigationStore.getState();
+  const { currentPath } = dataStore.getState();
+
+  const result = await requestQueue.add(() =>
+    invoke("system.search.dir", { dirPath: currentPath, query: searchQuery }),
+  );
+
+  selectionStore.setState({ dirty: false });
+  dataStore.setState({ ...result });
+};
+
 export { stageDestinationPath, openInEnvironment, openInDefaultExplorer, refresh, readDrives, navigateToImageGridView };
+export { stageSearchQuery, executeSearch };
 export { navigateGotoFolder, navigateToFolder, navigateUp, navigateToPreviousFolder, navigateToNextFolder };
 export { clearNavigationHistory };

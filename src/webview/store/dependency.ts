@@ -105,7 +105,7 @@ function createWeightBasedLayout<T extends { width: number; height: number }>(pa
  */
 const handleNavigationUpdate = () => {
   const { currentPath } = dataStore.getState();
-  const { pathHeatmap: oldMap } = navigationStore.getState();
+  const { pathHeatmap: oldMap, currentPath: prevPath } = navigationStore.getState();
 
   const nextMap = new Map(oldMap);
 
@@ -123,12 +123,16 @@ const handleNavigationUpdate = () => {
     .sort((a, b) => b[1] - a[1])
     .map(([path]) => path);
 
+  const pathChanged = currentPath !== prevPath;
+
   navigationStore.setState({
     currentPath,
     destPath: currentPath, // 覆蓋使用者輸入的暫存目標路徑
     pathHeatmap: nextMap,
     recentlyVisitedPaths,
     mostFrequentPaths,
+    // 切換目錄時清除搜尋字串，留在同一目錄時（如搜尋結果）保留
+    ...(pathChanged ? { searchQuery: "" } : {}),
   });
 };
 

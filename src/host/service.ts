@@ -3,7 +3,7 @@ import * as vscode from "vscode";
 import { pasteOptions, pastePickOptions } from "@host/config";
 import { handleDelete, handlePaste, handleRename } from "@host/handlers";
 import { handleCreateFile, handleCreateDir } from "@host/handlers";
-import { handleReadDirectory, handleReadImages } from "@host/handlers";
+import { handleReadDirectory, handleReadImages, handleSearchDirectory } from "@host/handlers";
 
 import { generateThumbnail, openImage } from "@host/utils/image";
 import { listSystemFolders, listVolumes } from "@host/utils/system-windows";
@@ -278,6 +278,7 @@ export const explorerService = {
   "show.error": showError,
   "clipboard.write": writeClipboard,
   "system.read.dir": handleReadDirectory,
+  "system.search.dir": handleSearchDirectory,
   "system.read.user.paths": readUserPaths,
   "system.read.volumes": readSystemVolumes,
   "system.read.images": readImages,
