@@ -45,10 +45,11 @@ Webview 前端的主入口檔案，定義根元件 `App` 並透過 `startReactAp
 提供書籤的所有操作函式：
 
 - `loadBookmarks()` — 從 Host 端讀取書籤列表，更新至 `navigationExternalStore.favoritePaths`。
-- `addBookmark(dirPath?)` — 添加書籤，若未提供路徑則使用當前目錄。透過 `invoke("bookmarks.add")` 發送請求。
+- `addBookmark()` — 將目前目錄加入書籤，透過 `invoke("bookmarks.add")` 發送請求。
 - `removeBookmark(dirPath)` — 移除指定路徑的書籤。
 - `clearBookmarks()` — 清空所有書籤。
-- `moveBookmark(dirPath, direction)` — 移動書籤位置（`"top"` / `"bottom"` / `"up"` / `"down"`）。
+- `moveBookmarkUp(dirPath)` / `moveBookmarkDown(dirPath)` — 將指定書籤在列表中上移或下移一個位置。
+- `moveBookmarkTop(dirPath)` / `moveBookmarkBottom(dirPath)` — 將指定書籤移動到列表最上方或最下方。
 - `navigateToBookmark(dirPath)` — 導航至指定書籤路徑，呼叫 `navigateToFolder`。
 
 ---
