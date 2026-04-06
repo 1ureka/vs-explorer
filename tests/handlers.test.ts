@@ -37,6 +37,12 @@ describe("handleInitialData", () => {
     expect(result.isCurrentRoot).toBe(true);
   });
 
+  it("應該正確識別 %VAR% 路徑(Windows)", () => {
+    if (process.platform !== "win32") return;
+    const result = handleInitialData({ dirPath: "%APPDATA%\\.minecraft" });
+    expect(result.currentPath).toBe(path.resolve(process.env.APPDATA!, ".minecraft"));
+  });
+
   it("應該正確識別根目錄(Unix)", () => {
     if (process.platform === "win32") return;
     const result = handleInitialData({ dirPath: "/" });
