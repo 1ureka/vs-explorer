@@ -1,4 +1,4 @@
-# 1ureka 的 VS Code 系統瀏覽器套件
+# vs-explorer
 
 VS Code 的工作區域雖然便於管理程式碼專案，但在處理本地資源時仍有不足。當需要整理下載在外部的素材、瀏覽參考檔案、進行批量檔案操作、或是想知道當前系統狀態時，往往必須切換到其他應用，打斷了在 VS Code 中的工作流程。
 
@@ -219,7 +219,7 @@ VS Code 的工作區域雖然便於管理程式碼專案，但在處理本地資
 
 ### 安裝步驟
 
-1. 前往 [GitHub Releases](https://github.com/1ureka/1ureka.vscode.explorer/releases) 下載最新的 `.vsix` 檔案
+1. 前往 [GitHub Releases](https://github.com/1ureka/vs-explorer/releases) 下載最新的 `.vsix` 檔案
 
 2. 在 VS Code 中安裝擴展：
    - 開啟命令面板（`Ctrl+Shift+P`）
@@ -227,7 +227,3 @@ VS Code 的工作區域雖然便於管理程式碼專案，但在處理本地資
    - 選擇下載的 `.vsix` 檔案
 
 3. 安裝完成後，重新啟動 VS Code 即可使用系統瀏覽器功能
-
----
-
-作者：1ureka | 版本：1.0.0

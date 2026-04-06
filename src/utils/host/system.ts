@@ -106,7 +106,11 @@ async function inspectDirectory(entries: ReadDirectoryEntry[]): Promise<InspectD
  * 解析並標準化路徑，確保在 Windows 系統中磁碟機代號為大寫字母。
  */
 function resolvePath(dirPath: string): string {
-  let resolvedPath = path.resolve(dirPath);
+  const expanded = dirPath.replace(/%([^%]+)%/g, (_, varName: string) => {
+    return process.env[varName] ?? `%${varName}%`;
+  });
+
+  let resolvedPath = path.resolve(expanded);
   if (resolvedPath.length >= 2 && resolvedPath[1] === ":" && /^[a-zA-Z]$/.test(resolvedPath[0])) {
     return resolvedPath[0].toUpperCase() + resolvedPath.slice(1);
   }
