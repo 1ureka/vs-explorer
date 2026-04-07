@@ -48,7 +48,7 @@ const readClipboard = async () => {
  */
 const writeSystemClipboard = (type: "path" | "realPath" | "name") => {
   const { lastSelectedIndex } = selectionStore.getState();
-  if (!lastSelectedIndex) return;
+  if (lastSelectedIndex === null || lastSelectedIndex < 0) return;
 
   const { entries } = viewDataStore.getState();
   const item = entries[lastSelectedIndex];
