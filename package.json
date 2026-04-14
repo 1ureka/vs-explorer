@@ -35,13 +35,9 @@
         "icon": "$(folder-library)"
       },
       {
-        "command": "1ureka.explorer.openNavigation",
+        "command": "1ureka.explorer.openFromPath",
         "title": "開啟系統瀏覽器",
         "icon": "$(folder-library)"
-      },
-      {
-        "command": "1ureka.explorer.openFromPath",
-        "title": "在系統瀏覽器中顯示"
       },
       {
         "command": "1ureka.explorer.openFromFile",
@@ -52,10 +48,6 @@
       "commandPalette": [
         {
           "command": "1ureka.explorer.openFromDialog"
-        },
-        {
-          "command": "1ureka.explorer.openNavigation",
-          "when": "false"
         },
         {
           "command": "1ureka.explorer.openFromPath",
@@ -87,14 +79,14 @@
       ],
       "view/title": [
         {
-          "command": "1ureka.explorer.openNavigation",
+          "command": "1ureka.explorer.openFromPath",
           "when": "view == workbench.explorer.fileView",
           "group": "navigation"
         }
       ],
       "editor/title": [
         {
-          "command": "1ureka.explorer.openNavigation",
+          "command": "1ureka.explorer.openFromPath",
           "when": "true",
           "group": "navigation"
         }

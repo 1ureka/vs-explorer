@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { createCommandManager } from "@vscode/utils/command";
 import { ExplorerWebviewPanelProvider } from "@host/provider";
-import { navigationOptions } from "@host/config";
 
 /**
  * 啟動系統檔案瀏覽器功能，註冊相關命令
@@ -10,19 +9,6 @@ import { navigationOptions } from "@host/config";
 export function activate(context: vscode.ExtensionContext) {
   const explorerProvider = new ExplorerWebviewPanelProvider(context);
   const commandManager = createCommandManager(context);
-
-  commandManager.register("1ureka.explorer.openNavigation", async () => {
-    const pickerOptions = { placeHolder: "選擇目標", title: "快速前往" };
-    const navigationOption = await vscode.window.showQuickPick(navigationOptions, pickerOptions);
-
-    if (!navigationOption) {
-      return;
-    }
-
-    if (navigationOption.commandId) {
-      vscode.commands.executeCommand(navigationOption.commandId);
-    }
-  });
 
   commandManager.register("1ureka.explorer.openFromPath", async (params: vscode.Uri | string | undefined) => {
     if (params instanceof vscode.Uri) {
