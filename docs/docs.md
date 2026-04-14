@@ -10,7 +10,7 @@
 
 定義 `CommandId` 聯合型別，列舉本擴展所有已註冊的命令 ID 字串。
 
-目前包含四個命令：`openNavigation`、`openFromPath`、`openFromDialog`、`openFromFile`，皆以 `1ureka.explorer.` 為前綴。用於在 `register` 等 API 呼叫時提供型別安全的命令識別。
+目前包含三個命令：`openFromPath`、`openFromDialog`、`openFromFile`，皆以 `1ureka.explorer.` 為前綴。用於在 `register` 等 API 呼叫時提供型別安全的命令識別。
 
 ---
 
@@ -208,9 +208,8 @@
 
 擴展的主入口，匯出 `activate(context)` 函式供 VS Code 呼叫。
 
-啟動時建立 `ExplorerWebviewPanelProvider` 實例與 `CommandManager`，並註冊以下四個命令：
+啟動時建立 `ExplorerWebviewPanelProvider` 實例與 `CommandManager`，並註冊以下三個命令：
 
-- `openNavigation` — 顯示 QuickPick 導航選單，讓使用者快速選擇要執行的命令（如開啟系統瀏覽器）。
 - `openFromPath` — 接受 `Uri` 或 `string` 參數，以該路徑建立瀏覽器面板；若無參數則使用 workspace 的第一個資料夾。
 - `openFromDialog` — 開啟系統對話框讓使用者選擇資料夾，選擇後建立瀏覽器面板。
 - `openFromFile` — 接受檔案 `Uri` 或 `string`，取其所在資料夾建立瀏覽器面板；無參數時嘗試使用當前活動編輯器的檔案路徑。
@@ -221,7 +220,6 @@
 
 定義擴展主機端的 UI 組態常數，供 `service.ts` 與 `index.ts` 使用：
 
-- `navigationOptions` — 導航 QuickPick 選項陣列，每個選項包含 `iconPath`、`label`、`description`、`detail` 與對應的 `commandId`。目前提供「當前目錄」與「指定目錄」兩種開啟方式。
 - `pastePickOptions` — 貼上操作 QuickPick 的 `title` 與 `placeHolder` 文字設定。
 - `pasteOptions` — 貼上操作選項陣列，包含四種模式的選項：複製（不覆蓋）、複製（覆蓋）、移動（不覆蓋）、移動（覆蓋），每個選項附帶 `type`（`"copy"` | `"move"`）與 `overwrite`（`boolean`）欄位，以及詳細的行為說明。
 

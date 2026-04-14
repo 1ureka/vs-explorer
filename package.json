@@ -4,7 +4,7 @@
   "author": "1ureka",
   "publisher": "1ureka",
   "description": "一個用於增強 VS Code 本地資源與系統管理的個人擴展套件",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "./dist/extension.js",
   "type": "module",
   "engines": {
@@ -35,13 +35,9 @@
         "icon": "$(folder-library)"
       },
       {
-        "command": "1ureka.explorer.openNavigation",
+        "command": "1ureka.explorer.openFromPath",
         "title": "開啟系統瀏覽器",
         "icon": "$(folder-library)"
-      },
-      {
-        "command": "1ureka.explorer.openFromPath",
-        "title": "在系統瀏覽器中顯示"
       },
       {
         "command": "1ureka.explorer.openFromFile",
@@ -52,10 +48,6 @@
       "commandPalette": [
         {
           "command": "1ureka.explorer.openFromDialog"
-        },
-        {
-          "command": "1ureka.explorer.openNavigation",
-          "when": "false"
         },
         {
           "command": "1ureka.explorer.openFromPath",
@@ -87,14 +79,14 @@
       ],
       "view/title": [
         {
-          "command": "1ureka.explorer.openNavigation",
+          "command": "1ureka.explorer.openFromPath",
           "when": "view == workbench.explorer.fileView",
           "group": "navigation"
         }
       ],
       "editor/title": [
         {
-          "command": "1ureka.explorer.openNavigation",
+          "command": "1ureka.explorer.openFromPath",
           "when": "true",
           "group": "navigation"
         }
@@ -104,7 +96,7 @@
   "scripts": {
     "build": "tsx src/build.ts",
     "compile": "tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "oxlint .",
     "test": "vitest run"
   },
   "dependencies": {
@@ -114,26 +106,24 @@
   "devDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/material": "^7.3.5",
-    "@tanstack/react-virtual": "^3.13.12",
+    "@mui/material": "^7.3.10",
+    "@tanstack/react-virtual": "^3.13.23",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^25.5.2",
-    "@types/react": "^19.2.6",
+    "@types/node": "^25.6.0",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/vscode": "^1.106.1",
-    "@typescript-eslint/eslint-plugin": "^8.58.0",
-    "@typescript-eslint/parser": "^8.58.0",
     "colord": "^2.9.3",
     "esbuild": "^0.28.0",
-    "eslint": "^10.2.0",
     "fs-extra": "^11.3.4",
-    "fuse.js": "^7.1.0",
+    "fuse.js": "^7.3.0",
     "iconv-lite": "^0.7.2",
+    "oxlint": "^1.60.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.3",
+    "vitest": "^4.1.4",
     "zustand": "^5.0.12"
   }
 }

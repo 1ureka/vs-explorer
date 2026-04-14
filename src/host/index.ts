@@ -2,7 +2,6 @@ import * as vscode from "vscode";
 import * as path from "path";
 import { createCommandManager } from "@vscode/utils/command";
 import { ExplorerWebviewPanelProvider } from "@host/provider";
-import { navigationOptions } from "@host/config";
 
 /**
  * 啟動系統檔案瀏覽器功能，註冊相關命令
@@ -11,31 +10,36 @@ export function activate(context: vscode.ExtensionContext) {
   const explorerProvider = new ExplorerWebviewPanelProvider(context);
   const commandManager = createCommandManager(context);
 
-  commandManager.register("1ureka.explorer.openNavigation", async () => {
-    const pickerOptions = { placeHolder: "選擇目標", title: "快速前往" };
-    const navigationOption = await vscode.window.showQuickPick(navigationOptions, pickerOptions);
-
-    if (!navigationOption) {
-      return;
-    }
-
-    if (navigationOption.commandId) {
-      vscode.commands.executeCommand(navigationOption.commandId);
-    }
-  });
-
   commandManager.register("1ureka.explorer.openFromPath", async (params: vscode.Uri | string | undefined) => {
-    if (params instanceof vscode.Uri) {
-      explorerProvider.createPanel(params.fsPath);
-    } else if (typeof params === "string") {
-      explorerProvider.createPanel(params);
-    } else {
+    const fallback = () => {
       const { workspaceFolders } = vscode.workspace;
+
       if (workspaceFolders?.length) {
         explorerProvider.createPanel(workspaceFolders[0].uri.fsPath);
       } else {
         vscode.window.showErrorMessage("請提供資料夾路徑或先開啟一個工作區資料夾");
       }
+    };
+
+    if (params === undefined) {
+      fallback();
+      return;
+    }
+
+    if (typeof params === "string") {
+      explorerProvider.createPanel(params);
+      return;
+    }
+
+    try {
+      const stat = await vscode.workspace.fs.stat(params);
+      if (stat.type != vscode.FileType.Directory) {
+        explorerProvider.createPanel(path.dirname(params.fsPath));
+      } else {
+        explorerProvider.createPanel(params.fsPath);
+      }
+    } catch {
+      fallback();
     }
   });
 
