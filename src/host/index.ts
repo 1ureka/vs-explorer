@@ -11,17 +11,35 @@ export function activate(context: vscode.ExtensionContext) {
   const commandManager = createCommandManager(context);
 
   commandManager.register("1ureka.explorer.openFromPath", async (params: vscode.Uri | string | undefined) => {
-    if (params instanceof vscode.Uri) {
-      explorerProvider.createPanel(params.fsPath);
-    } else if (typeof params === "string") {
-      explorerProvider.createPanel(params);
-    } else {
+    const fallback = () => {
       const { workspaceFolders } = vscode.workspace;
+
       if (workspaceFolders?.length) {
         explorerProvider.createPanel(workspaceFolders[0].uri.fsPath);
       } else {
         vscode.window.showErrorMessage("請提供資料夾路徑或先開啟一個工作區資料夾");
       }
+    };
+
+    if (params === undefined) {
+      fallback();
+      return;
+    }
+
+    if (typeof params === "string") {
+      explorerProvider.createPanel(params);
+      return;
+    }
+
+    try {
+      const stat = await vscode.workspace.fs.stat(params);
+      if (stat.type != vscode.FileType.Directory) {
+        explorerProvider.createPanel(path.dirname(params.fsPath));
+      } else {
+        explorerProvider.createPanel(params.fsPath);
+      }
+    } catch {
+      fallback();
     }
   });
 
