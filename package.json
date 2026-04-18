@@ -4,7 +4,7 @@
   "author": "1ureka",
   "publisher": "1ureka",
   "description": "一個用於增強 VS Code 本地資源與系統管理的個人擴展套件",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": "./dist/extension.js",
   "type": "module",
   "engines": {
