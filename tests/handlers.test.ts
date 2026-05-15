@@ -911,11 +911,11 @@ describe("handleDelete", () => {
 
   it("應該成功刪除單一檔案", async () => {
     const dirPath = getFixturesPath("multiple-files");
-    const itemList = ["file1.txt"];
+    const filePaths = [path.join(dirPath, "file1.txt")];
 
     const result = await handleDelete({
-      itemList,
-      dirPath,
+      filePaths,
+      refreshDirPath: dirPath,
       withProgress: async (_title, fn) => await fn((_progress) => {}),
       showErrorReport: (content) => console.error(content),
     });
@@ -930,11 +930,11 @@ describe("handleDelete", () => {
 
   it("應該成功刪除資料夾及其內容", async () => {
     const dirPath = getFixturesPath("nested-structure");
-    const itemList = ["level1"];
+    const filePaths = [path.join(dirPath, "level1")];
 
     const result = await handleDelete({
-      itemList,
-      dirPath,
+      filePaths,
+      refreshDirPath: dirPath,
       withProgress: async (_title, fn) => await fn((_progress) => {}),
       showErrorReport: (content) => console.error(content),
     });
@@ -954,16 +954,16 @@ describe("handleDelete", () => {
     const dirPath = getFixturesPath("mixed-content");
     const originLength = (await handleReadDirectory({ dirPath })).entries.length;
 
-    const itemList = ["text-file.txt", "folder1"];
+    const filePaths = [path.join(dirPath, "text-file.txt"), path.join(dirPath, "folder1")];
     const result = await handleDelete({
-      itemList,
-      dirPath,
+      filePaths,
+      refreshDirPath: dirPath,
       withProgress: async (_title, fn) => await fn((_progress) => {}),
       showErrorReport: (content) => console.error(content),
     });
 
     expect(result).not.toBeNull();
-    expect(result.entries).toHaveLength(originLength - itemList.length);
+    expect(result.entries).toHaveLength(originLength - filePaths.length);
 
     const textFile = result.entries.find((e) => e.fileName === "text-file.txt");
     const folder = result.entries.find((e) => e.fileName === "folder1");
@@ -974,11 +974,15 @@ describe("handleDelete", () => {
 
   it("刪除不存在的檔案時應該靜默處理", async () => {
     const dirPath = getFixturesPath("multiple-files");
-    const itemList = ["file1.txt", "non-existent.txt", "file2.txt"];
+    const filePaths = [
+      path.join(dirPath, "file1.txt"),
+      path.join(dirPath, "non-existent.txt"),
+      path.join(dirPath, "file2.txt"),
+    ];
 
     const result = await handleDelete({
-      itemList,
-      dirPath,
+      filePaths,
+      refreshDirPath: dirPath,
       withProgress: async (_title, fn) => await fn((_progress) => {}),
       showErrorReport: () => {},
     });
@@ -1001,14 +1005,14 @@ describe("handleDelete", () => {
 
   it("應該正確呼叫 withProgress 回調", async () => {
     const dirPath = getFixturesPath("multiple-files");
-    const itemList = ["file1.txt", "file2.txt"];
+    const filePaths = [path.join(dirPath, "file1.txt"), path.join(dirPath, "file2.txt")];
 
     let progressCalls = 0;
     let progressTotal = 0;
 
     await handleDelete({
-      itemList,
-      dirPath,
+      filePaths,
+      refreshDirPath: dirPath,
       withProgress: async (title, fn) => {
         expect(title).toContain("刪除");
         return await fn((progress) => {
@@ -1025,11 +1029,11 @@ describe("handleDelete", () => {
 
   it("刪除包含特殊字元名稱的檔案應該成功", async () => {
     const dirPath = getFixturesPath("special-names");
-    const itemList = ["中文檔案.txt", "#special!@$%.txt"];
+    const filePaths = [path.join(dirPath, "中文檔案.txt"), path.join(dirPath, "#special!@$%.txt")];
 
     const result = await handleDelete({
-      itemList,
-      dirPath,
+      filePaths,
+      refreshDirPath: dirPath,
       withProgress: async (_title, fn) => await fn((_progress) => {}),
       showErrorReport: (content) => console.error(content),
     });

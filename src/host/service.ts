@@ -249,11 +249,11 @@ const runPasteWorkflow = async ({ srcList, destDir }: { srcList: string[]; destD
 /**
  * [工作流] 執行刪除操作：包含確認提示 UI 與實作
  */
-const runDeleteWorkflow = async (params: { itemList: string[]; dirPath: string }) => {
-  const confirmationMessage = `確定要刪除所選的 ${params.itemList.length} 個項目嗎？此操作無法復原！`;
+const runDeleteWorkflow = async (params: { filePaths: string[]; refreshDirPath: string }) => {
+  const confirmationMessage = `確定要刪除所選的 ${params.filePaths.length} 個項目嗎？此操作無法復原！`;
 
   const confirm = await vscode.window.showWarningMessage(confirmationMessage, { modal: true }, "確定");
-  if (confirm !== "確定") return handleReadDirectory({ dirPath: params.dirPath });
+  if (confirm !== "確定") return handleReadDirectory({ dirPath: params.refreshDirPath });
 
   const showErrorReport = async (content: string) => {
     const doc = await vscode.workspace.openTextDocument({ content, language: "markdown" });

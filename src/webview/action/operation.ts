@@ -14,9 +14,9 @@ const deleteItems = async () => {
   const { entries } = viewDataStore.getState();
   const { currentPath } = dataStore.getState();
 
-  const itemList = entries.filter((_, index) => Boolean(selected[index])).map((entry) => entry.fileName);
+  const filePaths = entries.filter((_, index) => Boolean(selected[index])).map((entry) => entry.filePath);
 
-  const result = await requestQueue.add(() => invoke("system.delete", { itemList, dirPath: currentPath }));
+  const result = await requestQueue.add(() => invoke("system.delete", { filePaths, refreshDirPath: currentPath }));
   selectionStore.setState({ dirty: false });
   dataStore.setState({ ...result });
 };

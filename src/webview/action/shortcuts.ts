@@ -1,9 +1,11 @@
 import { navigateToNextFolder, navigateToPreviousFolder, navigateUp, refresh } from "@view/action/navigation";
 import { selectAll, selectInvert, selectNone } from "@view/action/selection";
 import { readClipboard, writeClipboard } from "@view/action/clipboard";
+import { deleteSelectedGridImages } from "@view/action/grid-selection"; // @patch grid-selection
 import { actionInputClassName } from "@view/components/Action";
 import { deleteItems } from "@view/action/operation";
 import { toggleLeftPanel } from "@view/action/view";
+import { viewDataStore } from "@view/store/data";
 
 /**
  * 註冊所有快捷鍵
@@ -24,7 +26,12 @@ const registerAllShortcuts = () => {
     if (e.key === "Delete") {
       e.preventDefault();
       e.stopPropagation();
-      deleteItems();
+      // @patch grid-selection
+      if (viewDataStore.getState().viewMode === "images") {
+        deleteSelectedGridImages();
+      } else {
+        deleteItems();
+      }
     }
 
     // Alt + Left Arrow: 返回上一個資料夾

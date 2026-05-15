@@ -4,6 +4,7 @@ import { Box, keyframes, SxProps, Typography } from "@mui/material";
 import { viewDataStore, viewStateStore } from "@view/store/data";
 import { thumbnailCache } from "@view/store/cache";
 import { loadingStore } from "@view/store/queue";
+import { gridSelectionStore } from "@view/store/grid-selection"; // @patch grid-selection
 
 import { useVirtualizer } from "@view/layout-grid/virtualizer";
 import { getGridSize } from "@view/action/view";
@@ -82,6 +83,26 @@ const imageGridSx: SxProps = {
   [`&.size-l .${imageGridClass.itemWrapper}`]: { p: 0.5 },
   [`&.no-gap .${imageGridClass.itemWrapper}`]: { p: 0 },
 
+  [`& .${imageGridClass.itemWrapper}.selected`]: {
+    // 向內 outline
+    [`& .${imageGridClass.item}`]: {
+      outline: "2px solid var(--mui-palette-primary-main)",
+      outlineOffset: -2,
+    },
+    // 左上角圓點
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      top: 12,
+      left: 12,
+      width: 10,
+      height: 10,
+      borderRadius: "50%",
+      backgroundColor: "var(--mui-palette-primary-main)",
+      pointerEvents: "none",
+    },
+  },
+
   [`& .${imageGridClass.item}`]: {
     borderRadius: 0.5,
     width: 1,
@@ -125,6 +146,8 @@ const ImageGridItem = memo(({ filePath }: { filePath: string }) => {
 const ImageVirtualGrid = memo(() => {
   const loading = loadingStore((state) => state.loading);
   const imageLayout = viewDataStore((state) => state.imageEntries);
+  // @patch grid-selection: 訂閱選取狀態
+  const gridSelected = gridSelectionStore((state) => state.selected);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { visibleItems, totalHeight } = useVirtualizer({ scrollContainerRef, ...imageLayout });
@@ -146,8 +169,11 @@ const ImageVirtualGrid = memo(() => {
             transform: `translate3d(${item.pixelX}px, ${item.pixelY}px, 0)`,
           };
 
+          let wrapperClassName = imageGridClass.itemWrapper;
+          if (gridSelected[item.filePath]) wrapperClassName += " selected";
+
           return (
-            <div key={item.filePath} className={imageGridClass.itemWrapper} style={style} draggable {...dataAttr}>
+            <div key={item.filePath} className={wrapperClassName} style={style} draggable {...dataAttr}>
               <Suspense fallback={<div className={imageGridClass.item} />}>
                 <ImageGridItem filePath={item.filePath} />
               </Suspense>

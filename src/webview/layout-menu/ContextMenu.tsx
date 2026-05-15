@@ -1,9 +1,14 @@
 import { Divider, Popover } from "@mui/material";
+
 import { appStateStore, selectionStore, clipboardStore, viewDataStore } from "@view/store/data";
+import { gridSelectionStore } from "@view/store/grid-selection"; // @patch grid-selection
+import { deleteSelectedGridImages } from "@view/action/grid-selection"; // @patch grid-selection
+
 import { openInEnvironment, openInDefaultExplorer } from "@view/action/navigation";
 import { writeClipboard, readClipboard } from "@view/action/clipboard";
 import { openFile, createNewFolder, createNewFile, deleteItems } from "@view/action/operation";
 import { closeContextMenu, openPropertyDialog } from "@view/action/app";
+
 import { contextMenuSx } from "@view/layout-menu/config";
 import { ContextMenuButton } from "@view/layout-menu/ContextMenuButton";
 
@@ -55,7 +60,12 @@ export const ContextMenu = () => {
   const selected = selectionStore((state) => state.selected);
   const clipboardEntries = clipboardStore((state) => state.entries);
 
-  const hasSelection = selected.some((s) => s === 1);
+  // @patch grid-selection
+  const viewMode = viewDataStore((state) => state.viewMode);
+  const gridSelected = gridSelectionStore((state) => state.selected);
+
+  const hasSelection = viewMode === "images" ? Object.keys(gridSelected).length > 0 : selected.some((s) => s === 1);
+
   const hasClipboard = Object.keys(clipboardEntries).length > 0;
   const isOnItem = lastSelectedIndex !== null;
 
@@ -113,7 +123,7 @@ export const ContextMenu = () => {
       <ContextMenuButton
         actionIcon="codicon codicon-trash"
         actionName="刪除"
-        onClick={createContextMenuHandler(deleteItems)}
+        onClick={createContextMenuHandler(viewMode === "images" ? deleteSelectedGridImages : deleteItems)}
         disabled={!hasSelection}
       />
     </Popover>

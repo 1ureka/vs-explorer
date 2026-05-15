@@ -1,3 +1,4 @@
+import { selectGridImage } from "@view/action/grid-selection"; // @patch grid-selection
 import { openFile, startFileDrag } from "@view/action/operation";
 import { imageGridClass, imageGridItemDataAttr } from "@view/layout-grid/ImageGrid";
 
@@ -40,6 +41,7 @@ const handleClick = (e: React.MouseEvent) => {
   const meta = getMetaFromEvent(e);
   if (!meta) return;
 
+  selectGridImage(meta.filePath);
   if (e.detail !== 2) return;
 
   const { filePath } = meta;
