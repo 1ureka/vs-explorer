@@ -257,14 +257,13 @@ const handleRename = async (params: {
  * 處理刪除檔案/資料夾
  */
 const handleDelete = async (params: {
-  itemList: string[];
-  dirPath: string;
+  filePaths: string[];
+  refreshDirPath: string;
   withProgress: WithProgress;
   showErrorReport: (content: string) => void;
 }) => {
-  const { itemList, dirPath, withProgress, showErrorReport } = params;
-
-  const targetPaths = itemList.map((name) => path.join(dirPath, name));
+  const { filePaths, refreshDirPath, withProgress, showErrorReport } = params;
+  const targetPaths = filePaths;
 
   const itemCount = targetPaths.length;
   const itemFailures: Record<string, string> = {};
@@ -284,7 +283,7 @@ const handleDelete = async (params: {
     }
   });
 
-  if (Object.keys(itemFailures).length <= 0) return handleReadDirectory({ dirPath });
+  if (Object.keys(itemFailures).length <= 0) return handleReadDirectory({ dirPath: refreshDirPath });
 
   const sideEffects = {
     已刪除項目: { message: "已成功刪除的項目無法復原", severity: "high" },
@@ -294,7 +293,7 @@ const handleDelete = async (params: {
   const errorContent = generateErrorMessage({ action: "刪除", itemCount, itemFailures, sideEffects });
   showErrorReport(errorContent);
 
-  return handleReadDirectory({ dirPath });
+  return handleReadDirectory({ dirPath: refreshDirPath });
 };
 
 // ----------------------------------------------------------------------------
